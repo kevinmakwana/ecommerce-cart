@@ -104,13 +104,13 @@ export default function Index({ auth, products, isAdmin, filters }) {
                         </div>
                     </div>
 
-                    {products.length === 0 ? (
+                    {products.data.length === 0 ? (
                         <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                             <p className="text-center text-gray-500">No products available</p>
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                            {products.map((product) => (
+                            {products.data.map((product) => (
                                 <div key={product.id} className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                                     <div className="p-6">
                                         <h3 className="text-xl font-semibold text-gray-900 mb-2">{product.name}</h3>

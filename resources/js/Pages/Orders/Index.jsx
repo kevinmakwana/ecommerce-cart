@@ -27,7 +27,7 @@ export default function Index({ auth, orders, isAdmin }) {
                         )}
                     </div>
 
-                    {orders.length === 0 ? (
+                    {orders.data.length === 0 ? (
                         <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                             <div className="text-center py-12">
                                 <p className="text-gray-500 mb-4">
@@ -44,7 +44,7 @@ export default function Index({ auth, orders, isAdmin }) {
                         </div>
                     ) : (
                         <div className="space-y-6">
-                            {orders.map((order) => (
+                            {orders.data.map((order) => (
                                 <div key={order.id} className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                                     <div className="p-6">
                                         <div className="flex justify-between items-start mb-4">
