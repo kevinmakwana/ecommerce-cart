@@ -49,7 +49,7 @@ global.route = jest.fn((name) => {
 });
 
 // Mock components
-jest.mock('@/Components/Dropdown', () => {
+jest.mock('@/components/Dropdown', () => {
     const Dropdown = ({ children }) => <div data-testid="dropdown">{children}</div>;
     Dropdown.Trigger = ({ children }) => <div data-testid="dropdown-trigger">{children}</div>;
     Dropdown.Content = ({ children }) => <div data-testid="dropdown-content">{children}</div>;
@@ -57,19 +57,19 @@ jest.mock('@/Components/Dropdown', () => {
     return Dropdown;
 });
 
-jest.mock('@/Components/NavLink', () => {
+jest.mock('@/components/NavLink', () => {
     return function NavLink({ href, active, children }) {
         return <a href={href} data-active={active}>{children}</a>;
     };
 });
 
-jest.mock('@/Components/ResponsiveNavLink', () => {
+jest.mock('@/components/ResponsiveNavLink', () => {
     return function ResponsiveNavLink({ href, active, children }) {
         return <a href={href} data-active={active}>{children}</a>;
     };
 });
 
-jest.mock('@/Components/ApplicationLogo', () => {
+jest.mock('@/components/ApplicationLogo', () => {
     return function ApplicationLogo() {
         return <div>Logo</div>;
     };

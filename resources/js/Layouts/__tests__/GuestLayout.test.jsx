@@ -7,7 +7,7 @@ jest.mock('@inertiajs/react', () => ({
 }));
 
 // Mock ApplicationLogo
-jest.mock('@/Components/ApplicationLogo', () => {
+jest.mock('@/components/ApplicationLogo', () => {
     return function ApplicationLogo() {
         return <svg data-testid="logo">Logo</svg>;
     };
