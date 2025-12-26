@@ -75,7 +75,7 @@ jest.mock('@/components/ApplicationLogo', () => {
     };
 });
 
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import AuthenticatedLayout from '@/layouts/AuthenticatedLayout';
 
 describe('AuthenticatedLayout', () => {
     const defaultProps = {

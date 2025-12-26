@@ -13,7 +13,7 @@ jest.mock('@/components/ApplicationLogo', () => {
     };
 });
 
-import GuestLayout from '@/Layouts/GuestLayout';
+import GuestLayout from '@/layouts/GuestLayout';
 
 describe('GuestLayout', () => {
     test('renders children content', () => {
