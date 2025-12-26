@@ -9,11 +9,11 @@ use App\Models\OrderItem;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 use Inertia\Response as InertiaResponse;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 class CartController extends Controller
 {
@@ -100,7 +100,7 @@ class CartController extends Controller
         return back()->with('success', 'Item removed from cart!');
     }
 
-    public function checkout(): InertiaResponse|RedirectResponse|HttpResponse
+    public function checkout(): InertiaResponse|RedirectResponse|SymfonyResponse
     {
         $user = auth()->user();
         $cartItems = $user->cartItems()->with('product')->get();
