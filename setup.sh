@@ -14,54 +14,137 @@ BLUE='\033[0;34m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-# Step 1: Start Docker containers
-echo -e "${BLUE}📦 Step 1/9: Starting Docker containers...${NC}"
+# Step 1: Check if vendor/bin/sail exists
+echo -e "${BLUE}📦 Step 1/10: Checking dependencies...${NC}"
+if [ ! -f ./vendor/bin/sail ]; then
+    echo -e "${YELLOW}⚠️  Sail not found. Installing Composer dependencies first...${NC}"
+    
+    # Check if Docker is running
+    if ! docker info > /dev/null 2>&1; then
+        echo -e "${YELLOW}⚠️  Docker is not running. Please start Docker Desktop and try again.${NC}"
+        exit 1
+    fi
+    
+    # Install dependencies using Docker directly
+    docker run --rm \
+        -u "$(id -u):$(id -g)" \
+        -v "$(pwd):/var/www/html" \
+        -w /var/www/html \
+        laravelsail/php84-composer:latest \
+        composer install --ignore-platform-reqs
+    
+    echo -e "${GREEN}✅ Composer dependencies installed${NC}"
+else
+    echo -e "${GREEN}✅ Sail already available${NC}"
+fi
+echo ""
+
+# Step 2: Setup environment (before starting containers)
+echo -e "${BLUE}⚙️  Step 2/10: Setting up environment...${NC}"
+if [ ! -f .env ]; then
+    cp .env.example .env
+    echo -e "${GREEN}✅ .env file created${NC}"
+    
+    # Configure database for MySQL (Sail default)
+    echo -e "${YELLOW}🔧 Configuring MySQL database...${NC}"
+    
+    # Update database configuration
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        # macOS requires -i with extension
+        sed -i '' 's/DB_CONNECTION=sqlite/DB_CONNECTION=mysql/' .env
+        sed -i '' 's/# DB_HOST=127.0.0.1/DB_HOST=mysql/' .env
+        sed -i '' 's/# DB_PORT=3306/DB_PORT=3306/' .env
+        sed -i '' 's/# DB_DATABASE=laravel/DB_DATABASE=ecommerce_cart/' .env
+        sed -i '' 's/# DB_USERNAME=root/DB_USERNAME=sail/' .env
+        sed -i '' 's/# DB_PASSWORD=/DB_PASSWORD=password/' .env
+        
+        # Update Redis configuration for Sail
+        sed -i '' 's/REDIS_HOST=127.0.0.1/REDIS_HOST=redis/' .env
+        
+        # Update Mail configuration for Mailpit
+        sed -i '' 's/MAIL_MAILER=log/MAIL_MAILER=smtp/' .env
+        sed -i '' 's/MAIL_HOST=127.0.0.1/MAIL_HOST=mailpit/' .env
+        sed -i '' 's/MAIL_PORT=2525/MAIL_PORT=1025/' .env
+        
+        # Update Cache and Queue to use Redis
+        sed -i '' 's/CACHE_STORE=database/CACHE_STORE=redis/' .env
+        sed -i '' 's/QUEUE_CONNECTION=database/QUEUE_CONNECTION=redis/' .env
+        
+        # Add APP_PORT if not exists
+        if ! grep -q "APP_PORT" .env; then
+            echo "" >> .env
+            echo "APP_PORT=8000" >> .env
+        fi
+    else
+        # Linux sed syntax
+        sed -i 's/DB_CONNECTION=sqlite/DB_CONNECTION=mysql/' .env
+        sed -i 's/# DB_HOST=127.0.0.1/DB_HOST=mysql/' .env
+        sed -i 's/# DB_PORT=3306/DB_PORT=3306/' .env
+        sed -i 's/# DB_DATABASE=laravel/DB_DATABASE=ecommerce_cart/' .env
+        sed -i 's/# DB_USERNAME=root/DB_USERNAME=sail/' .env
+        sed -i 's/# DB_PASSWORD=/DB_PASSWORD=password/' .env
+        
+        # Update Redis configuration for Sail
+        sed -i 's/REDIS_HOST=127.0.0.1/REDIS_HOST=redis/' .env
+        
+        # Update Mail configuration for Mailpit
+        sed -i 's/MAIL_MAILER=log/MAIL_MAILER=smtp/' .env
+        sed -i 's/MAIL_HOST=127.0.0.1/MAIL_HOST=mailpit/' .env
+        sed -i 's/MAIL_PORT=2525/MAIL_PORT=1025/' .env
+        
+        # Update Cache and Queue to use Redis
+        sed -i 's/CACHE_STORE=database/CACHE_STORE=redis/' .env
+        sed -i 's/QUEUE_CONNECTION=database/QUEUE_CONNECTION=redis/' .env
+        
+        # Add APP_PORT if not exists
+        if ! grep -q "APP_PORT" .env; then
+            echo "" >> .env
+            echo "APP_PORT=8000" >> .env
+        fi
+    fi
+    
+    echo -e "${GREEN}✅ Environment configured for Docker${NC}"
+else
+    echo -e "${YELLOW}⚠️  .env file already exists, skipping configuration${NC}"
+fi
+echo ""
+
+# Step 3: Start Docker containers
+echo -e "${BLUE}🐳 Step 3/10: Starting Docker containers...${NC}"
 ./vendor/bin/sail up -d
 echo -e "${GREEN}✅ Docker containers started${NC}"
 echo ""
 
 # Wait for services to be ready
 echo -e "${YELLOW}⏳ Waiting for services to be ready...${NC}"
-sleep 5
+sleep 10
 
-# Step 2: Install Composer dependencies
-echo -e "${BLUE}📚 Step 2/9: Installing Composer dependencies...${NC}"
-./vendor/bin/sail composer install
-echo -e "${GREEN}✅ Composer dependencies installed${NC}"
-echo ""
-
-# Step 3: Setup environment
-echo -e "${BLUE}⚙️  Step 3/9: Setting up environment...${NC}"
-if [ ! -f .env ]; then
-    cp .env.example .env
-    echo -e "${GREEN}✅ .env file created${NC}"
-else
-    echo -e "${YELLOW}⚠️  .env file already exists${NC}"
-fi
+# Step 4: Generate application key
+echo -e "${BLUE}🔑 Step 4/10: Generating application key...${NC}"
 ./vendor/bin/sail artisan key:generate --ansi
 echo -e "${GREEN}✅ Application key generated${NC}"
 echo ""
 
-# Step 4: Run migrations and seeders
-echo -e "${BLUE}🗄️  Step 4/9: Running database migrations and seeders...${NC}"
+# Step 5: Run migrations and seeders
+echo -e "${BLUE}🗄️  Step 5/10: Running database migrations and seeders...${NC}"
 ./vendor/bin/sail artisan migrate:fresh --seed --force
 echo -e "${GREEN}✅ Database setup complete${NC}"
 echo ""
 
-# Step 5: Install NPM dependencies
-echo -e "${BLUE}📦 Step 5/9: Installing NPM dependencies...${NC}"
+# Step 6: Install NPM dependencies
+echo -e "${BLUE}📦 Step 6/10: Installing NPM dependencies...${NC}"
 ./vendor/bin/sail npm install
 echo -e "${GREEN}✅ NPM dependencies installed${NC}"
 echo ""
 
-# Step 6: Build frontend assets
-echo -e "${BLUE}🎨 Step 6/9: Building frontend assets...${NC}"
+# Step 7: Build frontend assets
+echo -e "${BLUE}🎨 Step 7/10: Building frontend assets...${NC}"
 ./vendor/bin/sail npm run build
 echo -e "${GREEN}✅ Frontend assets built${NC}"
 echo ""
 
-# Step 7: Run code quality checks
-echo -e "${BLUE}🔍 Step 7/9: Running code quality checks...${NC}"
+# Step 8: Run code quality checks
+echo -e "${BLUE}🔍 Step 8/10: Running code quality checks...${NC}"
 echo "  - Laravel Pint (Code Style)..."
 ./vendor/bin/sail composer pint
 echo "  - PHPStan (Static Analysis)..."
@@ -73,20 +156,20 @@ echo "  - Rector (Dry Run)..."
 echo -e "${GREEN}✅ Code quality checks passed${NC}"
 echo ""
 
-# Step 8: Run backend tests
-echo -e "${BLUE}🧪 Step 8/9: Running backend tests (PHPUnit)...${NC}"
+# Step 9: Run backend tests
+echo -e "${BLUE}🧪 Step 9/10: Running backend tests (PHPUnit)...${NC}"
 ./vendor/bin/sail composer test
 echo -e "${GREEN}✅ Backend tests passed${NC}"
 echo ""
 
-# Step 9: Run frontend tests
-echo -e "${BLUE}🧪 Step 9/10: Running frontend tests (Jest)...${NC}"
+# Step 10: Run frontend tests
+echo -e "${BLUE}🧪 Step 10/10: Running frontend tests (Jest)...${NC}"
 ./vendor/bin/sail npm test
 echo -e "${GREEN}✅ Frontend tests passed${NC}"
 echo ""
 
-# Step 10: Setup Stripe CLI (Optional)
-echo -e "${BLUE}💳 Step 10/10: Setting up Stripe CLI (optional)...${NC}"
+# Optional: Setup Stripe CLI
+echo -e "${BLUE}💳 Optional: Setting up Stripe CLI...${NC}"
 if command -v stripe &> /dev/null; then
     echo -e "${GREEN}✅ Stripe CLI already installed${NC}"
     echo -e "${YELLOW}ℹ️  To setup webhook forwarding, run:${NC}"
