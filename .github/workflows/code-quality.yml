@@ -30,6 +30,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-composer-
       
+      - name: Configure Composer GitHub token
+        run: composer config -g github-oauth.github.com ${{ secrets.GITHUB_TOKEN }}
+      
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress --no-interaction
       
@@ -74,6 +77,9 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.4'
+      
+      - name: Configure Composer GitHub token
+        run: composer config -g github-oauth.github.com ${{ secrets.GITHUB_TOKEN }}
       
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress --no-interaction
