@@ -10,4 +10,7 @@ export default defineConfig({
         }),
         react(),
     ],
+    resolve: {
+        extensions: ['.js', '.jsx', '.json'],
+    },
 });
