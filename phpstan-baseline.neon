@@ -1,0 +1,85 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Parameter \#1 \$user of class Illuminate\\Auth\\Events\\Verified constructor expects Illuminate\\Contracts\\Auth\\MustVerifyEmail, App\\Models\\User given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Auth/VerifyEmailController.php
+
+		-
+			message: '#^Access to an undefined property Laravel\\Cashier\\Checkout\:\:\$url\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/CartController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\CartController\:\:checkout\(\) should return Illuminate\\Http\\RedirectResponse\|Inertia\\Response but returns Symfony\\Component\\HttpFoundation\\Response\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/CartController.php
+
+		-
+			message: '#^Method App\\Models\\CartItem\:\:product\(\) should return Illuminate\\Database\\Eloquent\\Relations\\BelongsTo\<App\\Models\\Product, App\\Models\\CartItem\> but returns Illuminate\\Database\\Eloquent\\Relations\\BelongsTo\<App\\Models\\Product, \$this\(App\\Models\\CartItem\)\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Models/CartItem.php
+
+		-
+			message: '#^Method App\\Models\\CartItem\:\:user\(\) should return Illuminate\\Database\\Eloquent\\Relations\\BelongsTo\<App\\Models\\User, App\\Models\\CartItem\> but returns Illuminate\\Database\\Eloquent\\Relations\\BelongsTo\<App\\Models\\User, \$this\(App\\Models\\CartItem\)\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Models/CartItem.php
+
+		-
+			message: '#^Generic type Illuminate\\Database\\Eloquent\\Relations\\HasMany\<App\\Models\\OrderItem\> in PHPDoc tag @return does not specify all template types of class Illuminate\\Database\\Eloquent\\Relations\\HasMany\: TRelatedModel, TDeclaringModel$#'
+			identifier: generics.lessTypes
+			count: 2
+			path: app/Models/Order.php
+
+		-
+			message: '#^Method App\\Models\\Order\:\:items\(\) should return Illuminate\\Database\\Eloquent\\Relations\\HasMany\<App\\Models\\OrderItem\> but returns Illuminate\\Database\\Eloquent\\Relations\\HasMany\<App\\Models\\OrderItem, \$this\(App\\Models\\Order\)\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Models/Order.php
+
+		-
+			message: '#^Method App\\Models\\Order\:\:user\(\) should return Illuminate\\Database\\Eloquent\\Relations\\BelongsTo\<App\\Models\\User, App\\Models\\Order\> but returns Illuminate\\Database\\Eloquent\\Relations\\BelongsTo\<App\\Models\\User, \$this\(App\\Models\\Order\)\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Models/Order.php
+
+		-
+			message: '#^Method App\\Models\\OrderItem\:\:order\(\) should return Illuminate\\Database\\Eloquent\\Relations\\BelongsTo\<App\\Models\\Order, App\\Models\\OrderItem\> but returns Illuminate\\Database\\Eloquent\\Relations\\BelongsTo\<App\\Models\\Order, \$this\(App\\Models\\OrderItem\)\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Models/OrderItem.php
+
+		-
+			message: '#^Method App\\Models\\OrderItem\:\:product\(\) should return Illuminate\\Database\\Eloquent\\Relations\\BelongsTo\<App\\Models\\Product, App\\Models\\OrderItem\> but returns Illuminate\\Database\\Eloquent\\Relations\\BelongsTo\<App\\Models\\Product, \$this\(App\\Models\\OrderItem\)\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Models/OrderItem.php
+
+		-
+			message: '#^Generic type Illuminate\\Database\\Eloquent\\Relations\\HasMany\<App\\Models\\CartItem\> in PHPDoc tag @return does not specify all template types of class Illuminate\\Database\\Eloquent\\Relations\\HasMany\: TRelatedModel, TDeclaringModel$#'
+			identifier: generics.lessTypes
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: '#^Generic type Illuminate\\Database\\Eloquent\\Relations\\HasMany\<App\\Models\\Order\> in PHPDoc tag @return does not specify all template types of class Illuminate\\Database\\Eloquent\\Relations\\HasMany\: TRelatedModel, TDeclaringModel$#'
+			identifier: generics.lessTypes
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: '#^Method App\\Models\\User\:\:cartItems\(\) should return Illuminate\\Database\\Eloquent\\Relations\\HasMany\<App\\Models\\CartItem\> but returns Illuminate\\Database\\Eloquent\\Relations\\HasMany\<App\\Models\\CartItem, \$this\(App\\Models\\User\)\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: '#^Method App\\Models\\User\:\:orders\(\) should return Illuminate\\Database\\Eloquent\\Relations\\HasMany\<App\\Models\\Order\> but returns Illuminate\\Database\\Eloquent\\Relations\\HasMany\<App\\Models\\Order, \$this\(App\\Models\\User\)\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Models/User.php

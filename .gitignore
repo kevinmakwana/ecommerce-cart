@@ -1,0 +1,73 @@
+*.log
+.DS_Store
+.env
+.env.backup
+.env.production
+.env.testing
+.phpactor.json
+.phpunit.result.cache
+/.fleet
+/.idea
+/.nova
+/.phpunit.cache
+/.vscode
+/.zed
+/auth.json
+/node_modules
+/public/build
+/public/hot
+/public/storage
+/storage/*.key
+/storage/pail
+/vendor
+Homestead.json
+Homestead.yaml
+Thumbs.db
+
+# Code Coverage
+/coverage
+/coverage.xml
+/clover.xml
+/.phpunit.cache
+/phpunit.xml.local
+
+# Code Quality Tools
+/phpmd-report.html
+/rector-cache
+/.phpstan.cache
+/.php-cs-fixer.cache
+
+# Build Artifacts
+/public/mix-manifest.json
+/public/js
+/public/css
+
+# Test Artifacts
+/tests/Browser/screenshots
+/tests/Browser/console
+
+# NPM/Yarn
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# OS Files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE Files
+*.swp
+*.swo
+*~
+.project
+.settings
+.buildpath
+
+# Temporary Files
+*.tmp
+*.temp
+*.bak
+*.backup
+*.cache

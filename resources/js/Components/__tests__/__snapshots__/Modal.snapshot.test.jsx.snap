@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Modal Snapshot Tests matches snapshot when closed 1`] = `<div />`;
+
+exports[`Modal Snapshot Tests matches snapshot when open 1`] = `
+<div>
+  <div />
+</div>
+`;
+
+exports[`Modal Snapshot Tests matches snapshot with closeable=false 1`] = `
+<div>
+  <div />
+</div>
+`;
+
+exports[`Modal Snapshot Tests matches snapshot with complex content 1`] = `
+<div>
+  <div />
+</div>
+`;
+
+exports[`Modal Snapshot Tests matches snapshot with different max widths: maxWidth-2xl 1`] = `
+<div>
+  <div />
+</div>
+`;
+
+exports[`Modal Snapshot Tests matches snapshot with different max widths: maxWidth-lg 1`] = `
+<div>
+  <div />
+</div>
+`;
+
+exports[`Modal Snapshot Tests matches snapshot with different max widths: maxWidth-md 1`] = `
+<div>
+  <div />
+</div>
+`;
+
+exports[`Modal Snapshot Tests matches snapshot with different max widths: maxWidth-sm 1`] = `
+<div>
+  <div />
+</div>
+`;
+
+exports[`Modal Snapshot Tests matches snapshot with different max widths: maxWidth-xl 1`] = `
+<div>
+  <div />
+</div>
+`;

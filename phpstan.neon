@@ -1,0 +1,26 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+    - phpstan-baseline.neon
+
+parameters:
+    paths:
+        - app
+        - config
+        - database
+        - routes
+        - tests
+
+    level: 6
+
+    ignoreErrors:
+        - '#PHPDoc tag @var#'
+
+    excludePaths:
+        - bootstrap/*
+        - storage/*
+        - vendor/*
+        - node_modules/*
+
+    # Laravel specific
+    reportUnmatchedIgnoredErrors: false
+    treatPhpDocTypesAsCertain: false
