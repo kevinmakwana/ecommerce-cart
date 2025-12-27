@@ -71,3 +71,5 @@ Desktop.ini
 *.bak
 *.backup
 *.cache
+
+package-lock.json
