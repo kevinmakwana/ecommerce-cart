@@ -9,13 +9,40 @@ export default function Index({ auth, products, isAdmin, filters }) {
     const [quantities, setQuantities] = useState({});
     const [submittingProducts, setSubmittingProducts] = useState({});
     const [showNotification, setShowNotification] = useState(false);
+    const [searchTerm, setSearchTerm] = useState(filters?.search || '');
     const { flash = {} } = usePage().props;
 
     const handleFilterChange = (filterValue) => {
-        router.get('/products', { filter: filterValue }, {
+        router.get('/products', { 
+            filter: filterValue,
+            search: searchTerm 
+        }, {
             preserveState: true,
             preserveScroll: true,
         });
+    };
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        router.get('/products', { 
+            search: searchTerm,
+            filter: filters?.filter 
+        }, {
+            preserveState: true,
+            preserveScroll: true,
+        });
+    };
+
+    const handleSearchChange = (value) => {
+        setSearchTerm(value);
+        if (value === '') {
+            router.get('/products', { 
+                filter: filters?.filter 
+            }, {
+                preserveState: true,
+                preserveScroll: true,
+            });
+        }
     };
 
     const handleQuantityChange = (productId, value) => {
@@ -83,17 +110,6 @@ export default function Index({ auth, products, isAdmin, filters }) {
                         <h1 className="text-3xl font-bold text-gray-900">Shop Our Products</h1>
                         
                         <div className="flex items-center gap-4">
-                            {isAdmin && (
-                                <select
-                                    value={filters?.filter || ''}
-                                    onChange={(e) => handleFilterChange(e.target.value)}
-                                    className="border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                >
-                                    <option value="">All Products</option>
-                                    <option value="low_stock">Low Stock Only</option>
-                                </select>
-                            )}
-                            
                             {!isAdmin && (
                                 <Link href="/cart">
                                     <PrimaryButton type="button">
@@ -102,6 +118,87 @@ export default function Index({ auth, products, isAdmin, filters }) {
                                 </Link>
                             )}
                         </div>
+                    </div>
+
+                    {/* Search and Filter Bar */}
+                    <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+                        <div className="flex flex-col md:flex-row gap-4">
+                            {/* Search Bar */}
+                            <form onSubmit={handleSearch} className="flex-1">
+                                <div className="flex gap-2">
+                                    <TextInput
+                                        type="text"
+                                        value={searchTerm}
+                                        onChange={(e) => handleSearchChange(e.target.value)}
+                                        placeholder="Search products by name..."
+                                        className="flex-1"
+                                    />
+                                    <PrimaryButton type="submit">
+                                        🔍 Search
+                                    </PrimaryButton>
+                                </div>
+                            </form>
+
+                            {/* Filter Dropdown */}
+                            <div className="flex items-center gap-2">
+                                <InputLabel value="Filter:" className="whitespace-nowrap" />
+                                <select
+                                    value={filters?.filter || ''}
+                                    onChange={(e) => handleFilterChange(e.target.value)}
+                                    className="border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                >
+                                    <option value="">All Products</option>
+                                    <option value="low_stock">Low Stock Only</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        {/* Active Filters Display */}
+                        {(filters?.search || filters?.filter) && (
+                            <div className="mt-4 flex flex-wrap gap-2 items-center">
+                                <span className="text-sm text-gray-600">Active filters:</span>
+                                {filters?.search && (
+                                    <span className="inline-flex items-center gap-1 px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">
+                                        Search: "{filters.search}"
+                                        <button
+                                            onClick={() => {
+                                                setSearchTerm('');
+                                                router.get('/products', { filter: filters?.filter }, {
+                                                    preserveState: true,
+                                                    preserveScroll: true,
+                                                });
+                                            }}
+                                            className="ml-1 hover:text-indigo-900"
+                                        >
+                                            ×
+                                        </button>
+                                    </span>
+                                )}
+                                {filters?.filter === 'low_stock' && (
+                                    <span className="inline-flex items-center gap-1 px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm">
+                                        Low Stock
+                                        <button
+                                            onClick={() => handleFilterChange('')}
+                                            className="ml-1 hover:text-orange-900"
+                                        >
+                                            ×
+                                        </button>
+                                    </span>
+                                )}
+                                <button
+                                    onClick={() => {
+                                        setSearchTerm('');
+                                        router.get('/products', {}, {
+                                            preserveState: true,
+                                            preserveScroll: true,
+                                        });
+                                    }}
+                                    className="text-sm text-indigo-600 hover:text-indigo-800 underline"
+                                >
+                                    Clear all
+                                </button>
+                            </div>
+                        )}
                     </div>
 
                     {products.data.length === 0 ? (
@@ -163,6 +260,29 @@ export default function Index({ auth, products, isAdmin, filters }) {
                                     </div>
                                 </div>
                             ))}
+                        </div>
+                    )}
+
+                    {/* Pagination Controls */}
+                    {products.data.length > 0 && (products.prev_page_url || products.next_page_url) && (
+                        <div className="mt-8 flex justify-center">
+                            <nav className="flex items-center gap-2">
+                                {products.links.map((link, index) => (
+                                    <Link
+                                        key={index}
+                                        href={link.url || '#'}
+                                        preserveScroll
+                                        className={`px-4 py-2 text-sm font-medium rounded-md ${
+                                            link.active
+                                                ? 'bg-indigo-600 text-white'
+                                                : link.url
+                                                ? 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'
+                                                : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                        }`}
+                                        dangerouslySetInnerHTML={{ __html: link.label }}
+                                    />
+                                ))}
+                            </nav>
                         </div>
                     )}
                 </div>
